@@ -1,0 +1,222 @@
+/*RESPONSIVE LIB*/
+body {
+  background-color: rgba(115, 159, 255, 0.8);
+  font-family: "Roboto", sans-serif;
+}
+
+/*GENERAL*/
+.d-none {
+  display: none !important;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0px;
+}
+
+ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px !important;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 1200px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.box-shadow-model-1 {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.window-model-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: white;
+}
+.window-model-1 .window-model-1-img {
+  width: 150px;
+}
+
+.crypto-button-model-1 {
+  width: 150px;
+  height: 150px;
+}
+.crypto-button-model-1 img {
+  width: 60%;
+}
+
+.crypto-button-model-1:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+}
+
+.margin-25 {
+  margin: 25px;
+}
+
+/*DASHBOARD*/
+#dashboard-section {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  margin-top: 100px;
+  background-color: rgba(217, 229, 255, 0.8);
+  border-radius: 10px;
+  padding: 20px;
+  /*CURRENCY LIST*/
+  /*CURRENCY INFORMATION*/
+}
+#dashboard-section #currency-list {
+  width: 40%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#dashboard-section #currency-list a {
+  display: flex;
+  justify-content: center;
+}
+#dashboard-section #currency-informations {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#dashboard-section #currency-informations #currency-informations-selected {
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  min-height: 470px;
+  /* GROUP INFORMATION*/
+  /*CHART DIV*/
+}
+#dashboard-section #currency-informations #currency-informations-selected #group {
+  width: 100%;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: start;
+  /*LEFT INFORMATION*/
+  /*RIGHT INFORMATION*/
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-currency-title {
+  font-weight: 900;
+  margin-bottom: 15px;
+  font-size: 40px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-currency-title::first-letter {
+  text-transform: uppercase;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information img {
+  width: 100px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 215px;
+  font-size: 24px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price #left-information-price-logo {
+  margin-right: 7px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price #left-information-price-title {
+  text-transform: uppercase;
+  font-weight: 300;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price #left-information-price-title #price-title-first-currency {
+  font-weight: 500;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price #left-information-price-value {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  /*font-weight: 900;*/
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #left-information #left-information-price #left-information-price-value #price-title-value-currency {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding-bottom: 3px;
+  margin-left: 3px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #right-information #change-informations {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #right-information #change-informations i {
+  font-size: 25px;
+  margin-right: 5px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #right-information #vol-informations {
+  display: flex;
+  flex-direction: row;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #right-information #vol-informations li:nth-child(1) {
+  margin-right: 5px;
+}
+#dashboard-section #currency-informations #currency-informations-selected #group #group-information #right-information #vol-informations li:nth-child(2) {
+  font-weight: 300;
+}
+#dashboard-section #currency-informations #currency-informations-selected #chart_div {
+  width: 100%;
+  margin-top: 50px;
+}
+
+/*SPINNER*/
+.lds-hourglass {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-hourglass:after {
+  content: " ";
+  display: block;
+  border-radius: 50%;
+  width: 0;
+  height: 0;
+  margin: 8px;
+  box-sizing: border-box;
+  border: 32px solid #fff;
+  border-color: rgba(115, 159, 255, 0.8) transparent rgba(115, 159, 255, 0.8) transparent;
+  animation: lds-hourglass 1.2s infinite;
+}
+
+@keyframes lds-hourglass {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+  50% {
+    transform: rotate(900deg);
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  100% {
+    transform: rotate(1800deg);
+  }
+}
+/*RESPONSIVE */
+
+/*# sourceMappingURL=index.css.map */

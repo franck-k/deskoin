@@ -1,0 +1,305 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CryptoCurrency Dashboard{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div id="dashboard-section" class="box-shadow-model-1 ">
+
+            <ul id="currency-list">
+                {% for cryptoCurrency in currencyAll  %}
+                    <li id="{{ cryptoCurrency.cryptoName }}" class="crypto-button-model-1 window-model-1 margin-25 box-shadow-model-1">
+                        <a href="{{ path('dashboard')~'?currency='~cryptoCurrency.cryptoName }}">
+                            <img src="{{ cryptoCurrency.logo }}" alt="">
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+
+            <div id="currency-informations" >
+                <div id="currency-informations-selected" class="window-model-1 margin-25 box-shadow-model-1">
+
+                    <div id="group" class="">
+                        <div id="group-information">
+                            <ul id="left-information">
+                                <li id="left-information-currency-title">
+
+                                    {{currencyHomeMarketTitle}}
+
+                                </li>
+                                <li>
+                                    <ul id="left-information-price">
+                                        <li id="left-information-price-logo">
+                                            <img src="{{ currencyHomeMarketLogo }}" alt="">
+                                        </li>
+                                        <li>
+                                            <ul>
+                                                <li id="left-information-price-title">
+                                                    <span id="price-title-first-currency">{{ currencyHomeMarketLogoTag }}</span>
+                                                    /eur
+                                                </li>
+                                                <li id="left-information-price-value">
+                                                <span id="left-information-price-val">
+                                                     {{currencyHomeMarketPrice.0.eur}}
+                                                </span>
+                                                    <span id="price-title-value-currency">eur</span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+
+                            </ul>
+                            <ul id="right-information">
+                                <li >
+                                    {% set currencyMarketPriceChange = currencyHomeMarketPrice.0.eur_24h_change | number_format(2) %}
+
+                                    {% if currencyMarketPriceChange > 0 %}
+                                        {% set changeInformationColor = 'green' %}
+                                        {% set changeInformationArrow = '<i id="change-information-arrow" class="fas fa-arrow-up"></i>' %}
+                                    {% else %}
+                                        {% set changeInformationColor = 'red' %}
+                                        {% set changeInformationArrow = '<i id="change-information-arrow" class="fas fa-arrow-down"></i>' %}
+                                    {% endif %}
+                                    <ul id="change-informations" class="{{changeInformationColor}}">
+                                        <li>
+                                            {{ changeInformationArrow | raw }}
+                                        </li>
+                                        <li>
+
+                                            <h1 id="change-information-value" >
+                                                {{currencyMarketPriceChange ~ '%'}}
+                                            </h1>
+                                        </li>
+                                    </ul>
+
+                                </li>
+                                <li>
+                                    <ul id="vol-informations">
+                                        <li>
+                                            Vol:
+                                        </li>
+                                        <li id="vol-value">
+                                            {{currencyHomeMarketPrice.0.eur_24h_vol}}
+                                        </li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div id="chart_div"></div>
+
+                    </div>
+
+
+                    <div id="spinnerLoad" class="lds-hourglass d-none"></div>
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {#AXIOS AJAX#}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+
+        google.charts.load('current', {packages: ['corechart', 'line']});
+        google.setOnLoadCallback(drawAxisTickColors);
+
+
+        const $cryptoSelectButton = $('.crypto-button-model-1')
+        const $currencyInformationTitle = $('#left-information-currency-title')
+        const $currencyInformationLogo = $('#left-information-price-logo').find('img')
+        const $currencyInformationPriceTag = $('#price-title-first-currency')
+        const $currencyInformationPriceValue = $('#left-information-price-val')
+        const $currencyInformationChangeGroup = $('#change-informations')
+        const $currencyInformationChangeArrow = $('#change-information-arrow')
+        const $currencyInformationChangeValue =  $('#change-information-value')
+        const $currencyInformationVol = $('#vol-value')
+        const $groupInformation = $('#group')
+        const $spinnerLoad = $('#spinnerLoad')
+
+        let dataPriceJson = '{{currencyHomeMarketData}}'
+        let dataPriceParse = JSON.parse(dataPriceJson )
+
+        var chartPrice
+
+        $cryptoSelectButton.click(function(e){
+            e.preventDefault()
+            cryptoAjaxTreatment($(this))
+        })
+
+        function cryptoAjaxTreatment(currency){
+
+            $currencyId = currency.attr('id')
+            $currencyUrl = currency.find('a').attr('href')
+            $groupInformation.addClass('d-none')
+            $spinnerLoad.removeClass('d-none')
+
+            axios({
+                method: 'get',
+                url: $currencyUrl
+            }).then(function (response) {
+
+                $groupInformation.removeClass('d-none')
+                $spinnerLoad.addClass('d-none')
+
+                let $currencyTitle = response.data.market_informations.title
+                let $currencyLogo = response.data.market_informations.logo
+                let $currencyTag = response.data.market_informations.tag
+
+                let $currencyPriceValue = response.data.market_price.eur
+                let $currencyPriceChange = response.data.market_price.eur_24h_change
+                let $currencyPriceVol = response.data.market_price.eur_24h_vol
+
+                let $currencyMarketData = response.data.market_data
+
+
+                for(i=0; i<$currencyMarketData.length; i++){
+                    const UtcFrance = 7200000
+                    let date = new Date($currencyMarketData[i][0]+UtcFrance)
+                    $currencyMarketData[i][0] = date.toLocaleString('fr-FR', { timeZone: 'UTC' })
+                }
+
+
+                $currencyInformationTitle.text($currencyTitle)
+                $currencyInformationLogo.attr('src', $currencyLogo)
+                $currencyInformationPriceTag.text($currencyTag)
+                $currencyInformationPriceValue.text($currencyPriceValue)
+                $currencyInformationChangeValue.text($currencyPriceChange.toFixed(2)+'%')
+                if($currencyPriceChange < 0){
+                    $currencyInformationChangeGroup.removeClass('green').addClass('red')
+                    $currencyInformationChangeArrow.removeClass('fa-arrow-up').addClass('fa-arrow-down')
+                }else{
+                    $currencyInformationChangeGroup.removeClass('red').addClass('green')
+                    $currencyInformationChangeArrow.removeClass('fa-arrow-down').addClass('fa-arrow-up')
+                }
+                $currencyInformationVol.text($currencyPriceVol.toFixed(3))
+
+
+
+                google.load('visualization', '1', {packages:['corechart', 'line'], 'callback' : function() {
+                        var dataPrice = new google.visualization.DataTable();
+                        dataPrice.addColumn('string', 'X');
+                        dataPrice.addColumn('number', 'Prix');
+                        dataPrice.addRows($currencyMarketData);
+                        var options = {
+                            hAxis: {
+                                title: '(24h)',
+                                textStyle: {
+                                    color: '#000000',
+                                    fontSize: 20,
+                                    fontName: 'Arial',
+                                    bold: true,
+                                    italic: true
+                                },
+                                titleTextStyle: {
+                                    color: '#000000',
+                                    fontSize: 16,
+                                    fontName: 'Arial',
+                                    bold: false,
+                                    italic: true
+                                }
+                            },
+                            vAxis: {
+                                title: '',
+                                textStyle: {
+                                    color: '#000000',
+                                    fontSize: 24,
+                                    bold: true
+                                },
+                                titleTextStyle: {
+                                    color: '#000000',
+                                    fontSize: 24,
+                                    bold: true
+                                }
+                            },
+                            colors: ['#a52714', '#097138']
+                        };
+                        chartPrice = new google.visualization.LineChart(document.getElementById('chart_div'));
+                        chartPrice.draw(dataPrice, options);
+
+                    }
+                });
+
+
+            }).catch(function (error) {
+
+            })
+
+
+
+        }
+
+
+
+        for(i=0; i<dataPriceParse .length; i++){
+
+            const UtcFrance = 7200000
+            let date = new Date(dataPriceParse[i][0]+UtcFrance)
+            dataPriceParse[i][0] = date.toLocaleString('fr-FR', { timeZone: 'UTC' })
+
+        }
+
+
+        function drawAxisTickColors(marketData = dataPriceParse) {
+
+            var dataPrice = new google.visualization.DataTable();
+            dataPrice.addColumn('string', 'X');
+            dataPrice.addColumn('number', 'Prix');
+            dataPrice.addRows(marketData);
+
+
+            var options = {
+                hAxis: {
+                    title: '(24h)',
+                    textStyle: {
+                        color: '#000000',
+                        fontSize: 20,
+                        fontName: 'Arial',
+                        bold: true,
+                        italic: true
+                    },
+                    titleTextStyle: {
+                        color: '#000000',
+                        fontSize: 16,
+                        fontName: 'Arial',
+                        bold: false,
+                        italic: true
+                    }
+                },
+                vAxis: {
+                    title: '',
+                    textStyle: {
+                        color: '#000000',
+                        fontSize: 24,
+                        bold: true
+                    },
+                    titleTextStyle: {
+                        color: '#000000',
+                        fontSize: 24,
+                        bold: true
+                    }
+                },
+                colors: ['#a52714', '#097138']
+            };
+
+            chartPrice = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chartPrice.draw(dataPrice, options);
+        }
+    </script>
+{% endblock %}

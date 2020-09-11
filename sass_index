@@ -1,0 +1,2 @@
+#!/bin/sh
+./public/css/dart-sass/sass.bat ./public/css/sass/index.scss ./public/css/sass/index.css --watch
