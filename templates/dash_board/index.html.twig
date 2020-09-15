@@ -247,13 +247,36 @@
 
 
 
-        for(i=0; i<dataPriceParse .length; i++){
+        function dateConverter(array){
+      /*      for(i=0; i<array.length; i++) {
+                const UtcFrance = 7200000
+                let date = new Date(array[i][0] + UtcFrance)
+                array[i][0] = date.toLocaleString('fr-FR', {timeZone: 'UTC'})
+            }
+*/
 
-            const UtcFrance = 7200000
-            let date = new Date(dataPriceParse[i][0]+UtcFrance)
-            dataPriceParse[i][0] = date.toLocaleString('fr-FR', { timeZone: 'UTC' })
+            var intl = new Intl.DateTimeFormat("fr-FR", {
+                hour12:false,
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute : "2-digit",
+                seconde : "2-digit"
 
+            })
+            for(i=0; i<array.length; i++) {
+                let date = new Date(array[i][0])
+                array[i][0] = intl.format(date)
+            }
+
+            return array;
         }
+
+        dateConverter(dataPriceParse)
+
+
 
 
         function drawAxisTickColors(marketData = dataPriceParse) {
